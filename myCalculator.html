@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); 
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .header{
+        width: 100%;
+        height: auto;
+        display: block;
+        background-color: black;
+        color: #249A8E;
+        padding: 20px;
+    }
+
+    .wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #A89F92;
+        width: 100%;
+        height: 1080px;
+    }
+
+    #calculator{
+        display: grid;
+        grid-template-rows: 67px 381px 448px;
+        width: 414px;
+        height: 896px;
+        background-color: #000000;
+        color: white;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .history{
+        background-color: black;
+        color: #249A8E;
+        font-size: 24px;
+        display: flex;
+        justify-content: flex-start;
+        padding: 26px 16px;
+    }
+
+    #display{
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        padding: 216px 35px;
+        text-align: right;
+        font-size: 48px;
+    }
+    
+    #keypad{
+        display: grid;
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-columns: 104px 104px 104px 104px;
+        grid-row-gap: 0px;
+        grid-column-gap: 0px;
+    }
+
+    #keypad div{
+        width: 104px;
+        height: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        transition: 0.4s all;
+        color: white;
+        font-size: 40px;
+        text-decoration: none;
+        border: none;
+    }
+
+    #keypad div.upper-buttons{
+        background-color: #EFEFEF;
+        color: black;
+    }
+
+    #keypad div.main-operation{
+        background-color: #C0EDEA;
+        color: black;
+    }
+
+    #keypad div.equal-sign{
+        background-color: #249A8E;
+        color: black;
+    }
+
+    #keypad div.c-button{
+        background-color: #EFEFEF;
+        color: #249A8E;
+    }
+
+    /* hover */
+    #keypad div:hover{
+        background-color: #C4C4C4;
+        color: black;
+    }
+
+    #keypad div.upper-buttons:hover{
+        background-color: #C4C4C4;
+        color: black;
+    }
+
+    #keypad div.main-operation:hover{
+        background-color: #C4C4C4;
+        color: black;
+    }
+
+    #keypad div.equal-sign:hover{
+        background-color: #C4C4C4;
+        color: black;
+    }
+
+    #keypad div.c-button:hover{
+        background-color: #C4C4C4;
+        color: #249A8E;
+    }
+    
+</style>
+
+<body>
+
+    <div class= "header">
+        <h2>Calculator Design Using HTML5, CSS3, JavaScript</h2>
+    </div>
+
+    <div class="wrapper">
+
+        <div id="calculator">
+            <div class= "history">History</div>
+
+            <div id="display">
+                <div>
+                    <h2 id="result"></h2>
+                    <p id="operation">0</p>
+                </div>
+            </div>
+
+            <div id="keypad">
+                <div class="operator c-button" id="clear">C</div>
+                <div class="operator upper-buttons" id="parenthese">( )</div>
+                <div class="operator upper-buttons" id="positive-negative">+/-</div>
+                <div class="operator main-operation" id="division">/</div>
+                <div class="number">7</div>
+                <div class="number">8</div>
+                <div class="number">9</div>
+                <div class="operator main-operation" id="multiply">*</div>
+                <div class="number">4</div>
+                <div class="number">5</div>
+                <div class="number">6</div>
+                <div class="operator main-operation" id="subtract">-</div>
+                <div class="number">1</div>
+                <div class="number">2</div>
+                <div class="number">3</div>
+                <div class="operator main-operation" id="add">+</div>
+                <div class="empty"></div>
+                <div class="number">0</div>
+                <div class="empty"></div>
+                <div class="operator equal-sign" id="equal">=</div>
+            </div>
+            
+        </div>
+
+    </div>
+</body>
+
+<script>
+
+    //display
+    let operation = document.querySelector('#display p#operation');
+    let result = document.querySelector('#display h2#result');
+
+    //buttons
+    let numbers = document.querySelectorAll('#calculator div.number');
+    let addition = document.querySelector('#calculator div#add');
+    let subtract = document.querySelector('#calculator div#subtract');
+    let multiply = document.querySelector('#calculator div#multiply');
+    let division = document.querySelector('#calculator div#division');
+    let equal = document.querySelector('#calculator div#equal');
+    let clear = document.querySelector('#calculator div#clear');
+    let positiveNegative = document.querySelector('#calculator div#positive-negative');
+
+    //inputs
+    let firstNumber;
+    let secondNumber;
+    let operator = '';
+    //outputs
+    let rslt;
+
+    
+    //'numbers' button
+    numbers.forEach(function(i){
+        i.addEventListener('click' , function(e){
+            //e.target refers to that specific button we clicked on
+            //put the textcontent of the button we clicked on; in the textcontent of the result section.
+            if (result.textContent == '0'){
+                result.textContent = e.target.textContent;
+
+            } else {
+                result.textContent += e.target.textContent;
+            }
+        })
+    })
+
+    //'+' operator button
+    addition.addEventListener('click' , function(){
+        //define the firstNumber value with "result.textContent"
+        //convert it to a number with "parseFloat()" method.
+        firstNumber = parseFloat(result.textContent);
+        //clear the result display
+        result.textContent = '';
+        //define the type of the operator - here we have the 'add' operator
+        operator = '+';
+        //write the inputs in operation section
+        operation.textContent = firstNumber + operator;
+    })
+
+    //'-' operator button
+    subtract.addEventListener('click' , function(){
+        //define the firstNumber value with "result.textContent"
+        //convert it to a number with "parseFloat()" method.
+        firstNumber = parseFloat(result.textContent);
+        //clear the display
+        result.textContent = '';
+        //define the type of the operator
+        operator = '-';
+        //write the inputs in operation section
+        operation.textContent = firstNumber + operator;
+    })
+
+    //'*' operator button
+    multiply.addEventListener('click' , function(){
+        //define the firstNumber value with "result.textContent"
+        //convert it to a number with "parseFloat()" method.
+        firstNumber = parseFloat(result.textContent);
+        //clear the display
+        result.textContent = '';
+        //define the type of the operator
+        operator = '*';
+        //write the inputs in operation section
+        operation.textContent = firstNumber + operator;
+    })
+
+    // '/' operator button
+    division.addEventListener('click' , function(){
+        //define the firstNumber value with "result.textContent"
+        //convert it to a number with "parseFloat()" method.
+        firstNumber = parseFloat(result.textContent);
+        //clear the display
+        result.textContent = '';
+        //define the type of the operator
+        operator = '/';
+        //write the inputs in operation section
+        operation.textContent = firstNumber + operator;
+    })
+
+    //'C' button
+    clear.addEventListener('click' , function(){
+        operation.textContent = '0';
+        result.textContent = '';
+    })
+
+    //'+/-' button
+    positiveNegative.addEventListener('click' , function(){
+        result.textContent = result.textContent * -1;
+    })
+
+    //'=' button
+    equal.addEventListener('click' , function(){
+        //define the secondNumber
+        //convert it to a number with "parseFloat()" method.
+        secondNumber = parseFloat(result.textContent);
+
+        //switch between operator types to calculate the operations
+        switch(operator){
+            case '+':
+                rslt = firstNumber + secondNumber;
+            break;
+
+            case '-':
+                rslt = firstNumber - secondNumber;
+            break;
+
+            case '*':
+                rslt = firstNumber * secondNumber;
+            break;
+
+            case '/':
+                rslt = firstNumber / secondNumber;
+            break;
+        }
+
+        //show the rslt
+        operation.textContent = firstNumber + operator + secondNumber; 
+        result.textContent = rslt;
+    })
+
+</script>
+
+</html>
